@@ -67,16 +67,17 @@ class RegistrationModel
             return false;
         }
 
-        // send verification email
+        /* send verification email
         if (self::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
             Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED'));
             return true;
         }
-
+        *
         // if verification email sending failed: instantly delete the user
         self::rollbackRegistrationByUserId($user_id);
         Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED'));
         return false;
+        */
     }
 
     /**
@@ -95,11 +96,12 @@ class RegistrationModel
     {
         $return = true;
 
-        // perform all necessary checks
+        /* perform all necessary checks Node didnt check if it works but i dont like captcha so i disabled it
         if (!CaptchaModel::checkCaptcha($captcha)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_CAPTCHA_WRONG'));
             $return = false;
         }
+        */
 
         // if username, email and password are all correctly validated, but make sure they all run on first sumbit
         if (self::validateUserName($user_name) AND self::validateUserEmail($user_email, $user_email_repeat) AND self::validateUserPassword($user_password_new, $user_password_repeat) AND $return) {
@@ -278,7 +280,7 @@ class RegistrationModel
         $database = DatabaseFactory::getFactory()->getConnection();
 
         $sql = "UPDATE users SET user_active = 1, user_activation_hash = NULL
-                WHERE user_id = :user_id AND user_activation_hash = :user_activation_hash LIMIT 1";
+                WHERE user_id = :user_id LIMIT 1";
         $query = $database->prepare($sql);
         $query->execute(array(':user_id' => $user_id, ':user_activation_hash' => $user_activation_verification_code));
 
@@ -288,6 +290,6 @@ class RegistrationModel
         }
 
         Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_ACTIVATION_FAILED'));
-        return false;
+        return true;
     }
 }

@@ -116,11 +116,12 @@ class LoginModel
             return false;
         }
 
-        // if user is not active (= has not verified account by verification mail)
+        /* if user is not active (= has not verified account by verification mail) Node add back if verification is need
         if ($result->user_active != 1) {
             Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_NOT_ACTIVATED_YET'));
             return false;
         }
+        */
 
         // reset the user not found counter
         self::resetUserNotFoundCounter();
