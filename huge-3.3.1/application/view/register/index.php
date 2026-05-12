@@ -16,10 +16,6 @@
             <input type="password" name="user_password_new" pattern=".{6,}" placeholder="Password (6+ characters)" required autocomplete="off" />
             <input type="password" name="user_password_repeat" pattern=".{6,}" required placeholder="Repeat your password" autocomplete="off" />
 
-            <!-- quick & dirty captcha reloader -->
-            <a href="#" style="display: block; font-size: 11px; margin: 5px 0 15px 0; text-align: center"
-               onclick="document.getElementById('captcha').src = '<?php echo Config::get('URL'); ?>register/showCaptcha?' + Math.random(); return false">Reload Captcha</a>
-
             <input type="submit" value="Register" />
         </form>
     </div>
