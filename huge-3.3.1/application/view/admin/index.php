@@ -25,6 +25,8 @@
                     <td>suspension Time in days</td>
                     <td>Soft delete</td>
                     <td>Submit</td>
+                    <td>User Account Type</td>
+                    
                 </tr>
                 </thead>
                 <?php foreach ($this->users as $user) { ?>
@@ -47,6 +49,19 @@
                             <td>
                                 <input type="hidden" name="user_id" value="<?= $user->user_id; ?>" />
                                 <input type="submit" />
+                             <td>
+                                <select name="user_account_type">
+                                    <option value="1" <?= ($user->user_account_type == 1 ? 'selected' : ''); ?>>
+                                        Guest
+                                    </option>
+                                    <option value="2" <?= ($user->user_account_type == 2 ? 'selected' : ''); ?>>
+                                        User
+                                    </option>
+                                    <option value="2" <?= ($user->user_account_type == 7 ? 'selected' : ''); ?>>
+                                        Admin
+                                    </option>
+                                </select>
+                            </td>
                             </td>
                         </form>
                     </tr>

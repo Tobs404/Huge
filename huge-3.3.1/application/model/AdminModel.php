@@ -70,6 +70,25 @@ class AdminModel
         }
     }
 
+    public static function changeUserPrivilegeStatus($userId, $newType)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $query = $database->prepare("
+            UPDATE users
+            SET user_account_type = :account_type
+            WHERE user_id = :user_id
+            LIMIT 1
+        ");
+
+        $query->execute(array(
+            ':account_type' => $newType,
+            ':user_id' => $userId
+        ));
+
+        return false;
+    }
+
     /**
      * Kicks the selected user out of the system instantly by resetting the user's session.
      * This means, the user will be "logged out".
