@@ -19,9 +19,7 @@
                     <td>Id</td>
                     <td>Avatar</td>
                     <td>Username</td>
-                    <td>User's email</td>
-                    <td>Account Type</td>
-                    <td>Link to user's profile</td>
+                    <td>Chat With User</td>
                 </tr>
                 </thead>
                 <?php foreach ($this->users as $user) { ?>
@@ -33,10 +31,10 @@
                             <?php } ?>
                         </td>
                         <td><?= $user->user_name; ?></td>
-                        <td><?= $user->user_email; ?></td>
-                        <td><?= $user->user_account_type; ?></td>
                         <td>
-                            <a href="<?= Config::get('URL') . 'profile/showProfile/' . $user->user_id; ?>">Profile</a>
+                           <a href="<?= Config::get('URL') . 'Messenger/showMessages/' . $user->user_id ?>">
+                                Messages
+                            </a>
                         </td>
                     </tr>
                 <?php } ?>

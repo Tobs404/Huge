@@ -29,7 +29,12 @@ class NoteModel
      */
     public static function getNote($note_id)
     {
-        $database = DatabaseFactory::getFactory()->getConnection();
+        $servername = 'localhost';
+        $username = 'root';
+        $password = '1234';
+        $dbname = 'huge';
+
+        $conn = new mysqli($servername, $username, $password, $dbname);
 
         $sql = "SELECT user_id, note_id, note_text FROM notes WHERE user_id = :user_id AND note_id = :note_id LIMIT 1";
         $query = $database->prepare($sql);
