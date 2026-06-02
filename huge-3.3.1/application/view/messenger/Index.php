@@ -3,15 +3,21 @@
 
     <div class="box">
 
-        <!-- echo out the system feedback (error and success messages) -->
         <?php $this->renderFeedbackMessages(); ?>
 
         <h3>What happens here ?</h3>
 
         <div>
-            This controller/action/view shows a list of all users in the system. with the ability to soft delete a user
-            or suspend a user.
+            This is a simple user overview. It shows all users in the system, their id, username and avatar (if they have one). You can also click on the "Messages" link to chat with that user.
+            or simply click on "New Group" to create a new group and chat with multiple users at the same time.
         </div>
+
+        <!-- New Group Form -->
+        <form action="<?= Config::get('URL'); ?>Messenger/createGroupChat" method="post">
+            <input type="text" name="group_name" placeholder="Enter group name">
+            <button type="submit">New Group</button>
+        </form>
+
         <div>
             <table class="overview-table">
                 <thead>
@@ -32,10 +38,30 @@
                         </td>
                         <td><?= $user->user_name; ?></td>
                         <td>
-                           <a href="<?= Config::get('URL') . 'Messenger/showMessages/' . $user->user_id ?>">
+                            <a href="<?= Config::get('URL') . 'Messenger/showMessages/' . $user->user_id ?>">
                                 Messages
                             </a>
                         </td>
+                    </tr>
+                <?php } ?>
+                <?php foreach ($this->groups ?? [] as $group) { ?>
+                    <tr class="active">
+                        <td><?= $group->group_id; ?></td>
+                        <td><?= $group->name; ?></td>
+                        <?php if ($group->is_group) { ?>
+                            <td>
+                                <a href="<?= Config::get('URL') . 'Messenger/showGroupMessages/' . $group->group_id ?>">
+                                    Messages
+                                </a>
+                            </td>
+                        <?php } else { ?>
+                            <td>
+                                <a href="<?= Config::get('URL') . 'Messenger/showMessages/' . $user->user_id ?>">
+                                    Messages
+                                </a>
+                            </td>
+                        <?php } ?>
+                        <td></td>
                     </tr>
                 <?php } ?>
             </table>

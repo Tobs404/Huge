@@ -18,16 +18,36 @@ class MessengerController extends Controller
      */
     public function index()
     {
-        $this->View->render('messenger/index', array(
-                'users' => UserModel::getPublicProfilesOfAllUsers())
-        );
+       $this->View->render('messenger/index', array(
+            'users'  => UserModel::getPublicProfilesOfAllUsers(),
+            'groups' => MessageModel::getGroupsForUser(Session::get('user_id'))
+        ));
+    }
+
+    public function createGroupChat()
+    {
+        $userID    = Session::get('user_id');
+        $groupName = Request::post('group_name') ?? 'New Group';
+
+        $groupID = MessageModel::createGroup($userID, null, $groupName, 1);
+
+        Redirect::to('messenger/showGroupMessages/' . $groupID);
+    }
+
+    public function showGroupMessages($groupID)
+    {
+        $this->View->render('messenger/showGroupMessages', array(
+            'messages' => MessageModel::getMessages($groupID),
+            'groupID'  => $groupID,
+            'users'    => UserModel::getPublicProfilesOfAllUsers()
+        ));
     }
 
     public function showMessages($targetUserID)
     {
         $userID = Session::get('user_id');
 
-        $groupID = MessageModel::createGroup($userID, $targetUserID, "Chat between $userID and $targetUserID");
+        $groupID = MessageModel::createGroup($userID, $targetUserID, "Chat between $userID and $targetUserID", 0);
 
         if (!$groupID) {
             die("Group could not be created");
@@ -52,5 +72,23 @@ class MessengerController extends Controller
             'messages' => MessageModel::getMessages($groupID),
             'groupID' => $groupID
         ]);
+    }
+
+    public function insertGroupMessage()
+    {
+        $groupID = Request::post('groupID');
+        $message = Request::post('message');
+        
+        MessageModel::insertMessage($message, $groupID);
+        Redirect::to('messenger/showGroupMessages/' . $groupID);
+    }
+
+    public function inviteUser()
+    {
+        $groupID = Request::post('group_id');
+        $userID = Request::post('ID');
+
+        MessageModel::assignToGroup($userID, $groupID);
+        Redirect::to('messenger/showGroupMessages/' . $groupID);
     }
 }

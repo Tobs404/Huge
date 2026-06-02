@@ -18,10 +18,10 @@ class MessageModel
 
         $sql = "INSERT INTO messages (owner_id, message_content, date, is_read, group_id) VALUES (:owner, :message, :date, :is_read , :group_id)";
         $query = $database->prepare($sql);
-        $query->execute(array(':owner' => $ownerID, ':message' => $message, ':date' => $date, ':is_read' => 0, 'group_id' => $group_id));
+        $query->execute(array(':owner' => $ownerID, ':message' => $message, ':date' => $date, ':is_read' => 0, ':group_id' => $group_id));
     }
 
-    static function createGroup($user1, $user2, $name)
+    static function createGroup($user1, $user2, $name, $isGroupChat)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
@@ -44,22 +44,25 @@ class MessageModel
         $existing = $query->fetch();
 
         // 2. If found → return it
-        if ($existing) {
+        if ($existing && $isGroupChat == 0) {
             return $existing->group_id;
         }
 
         // 3. Otherwise create new group
-        $sql = "INSERT INTO groups (name) VALUES (:name)";
+        $sql = "INSERT INTO groups (name, is_group) VALUES (:name , :is_group)";
         $query = $database->prepare($sql);
 
         $query->execute([
-            ':name' => $name
+            ':name' => $name,
+            ':is_group' => $isGroupChat
         ]);
 
         $group_id = $database->lastInsertId();
 
         MessageModel::assignToGroup($user1, $group_id);
-        MessageModel::assignToGroup($user2, $group_id);
+        if($user2 != null){
+            MessageModel::assignToGroup($user2, $group_id);
+        }
 
         return $group_id;
     }
@@ -100,5 +103,36 @@ class MessageModel
         $sql = "INSERT INTO user_groups (user_id, group_id) VALUES (:userID, :groupID)";
         $query = $database->prepare($sql);
         $query->execute([':userID' => $userID, ':groupID' => $groupID]);
+    }
+
+    public static function getGroupsForUser($userID)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT 
+                    u.user_id,
+                    u.group_id,
+                    g.name,
+                    g.is_group
+                FROM user_groups u
+                JOIN groups g ON u.group_id = g.group_id
+                AND u.user_id = :userID";
+
+        $query = $database->prepare($sql);
+        $query->execute(array(':userID' => $userID));
+
+        $all_users_groups = array(); // fixed typo
+
+        foreach ($query->fetchAll(PDO::FETCH_OBJ) as $group) {
+            array_walk_recursive($group, 'Filter::XSSFilter');
+
+            $all_users_groups[$group->group_id] = new stdClass(); // use group_id as key
+            $all_users_groups[$group->group_id]->user_id  = $group->user_id;
+            $all_users_groups[$group->group_id]->group_id = $group->group_id;
+            $all_users_groups[$group->group_id]->name     = $group->name;
+            $all_users_groups[$group->group_id]->is_group = $group->is_group;
+        }
+
+        return $all_users_groups ?: array();
     }
 }
