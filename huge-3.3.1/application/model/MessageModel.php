@@ -25,15 +25,7 @@ class MessageModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        // 1. Check if group already exists between these 2 users
-        $sql = "
-            SELECT gm1.group_id
-            FROM user_groups gm1
-            JOIN user_groups gm2 ON gm1.group_id = gm2.group_id
-            WHERE gm1.user_id = :user1
-            AND gm2.user_id = :user2
-            LIMIT 1
-            ";
+        $sql = "CALL returnGroup (:user1 , :user2 , :is_group)";
 
         $query = $database->prepare($sql);
         $query->execute([
@@ -43,13 +35,11 @@ class MessageModel
 
         $existing = $query->fetch();
 
-        // 2. If found → return it
         if ($existing && $isGroupChat == 0) {
             return $existing->group_id;
         }
 
-        // 3. Otherwise create new group
-        $sql = "INSERT INTO groups (name, is_group) VALUES (:name , :is_group)";
+        $sql = "CALL createGroup (:name , :is_group)";
         $query = $database->prepare($sql);
 
         $query->execute([
@@ -67,16 +57,30 @@ class MessageModel
         return $group_id;
     }
 
+    static function getNewMessages($groupID){
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "CALL getNewMessages(:groupID)";
+        $query = $database->prepare($sql);
+        $query->execute([':groupID' => $groupID]);
+
+        $messages = $query->fetchAll();
+        
+        return $messages ?: array();
+    }
+
+    static function markAsRead($groupID)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+        $sql = "CALL markAsRead(:groupID)";
+        $query = $database->prepare($sql);
+        $query->execute([':groupID' => $groupID]);
+    }
+
     static function getMessages($group_id)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "
-            SELECT *
-            FROM messages
-            WHERE group_id = :group_id
-            ORDER BY date ASC
-        ";
+        $sql = "CALL getMessages(:group_id)";
 
         $query = $database->prepare($sql);
         $query->execute([
@@ -91,7 +95,7 @@ class MessageModel
         $database = DatabaseFactory::getFactory()->getConnection();
 
         // Check if already assigned
-        $sql = "SELECT * FROM user_groups WHERE user_id = :userID AND group_id = :groupID";
+        $sql = "CALL isAlreadyAssigned(:userID, :groupID)";
         $query = $database->prepare($sql);
         $query->execute([':userID' => $userID, ':groupID' => $groupID]);
 
@@ -100,7 +104,7 @@ class MessageModel
         }
 
         // Only insert if not already assigned
-        $sql = "INSERT INTO user_groups (user_id, group_id) VALUES (:userID, :groupID)";
+        $sql = "CALL assignUserToGroup(:userID, :groupID)";
         $query = $database->prepare($sql);
         $query->execute([':userID' => $userID, ':groupID' => $groupID]);
     }
@@ -109,14 +113,7 @@ class MessageModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT 
-                    u.user_id,
-                    u.group_id,
-                    g.name,
-                    g.is_group
-                FROM user_groups u
-                JOIN groups g ON u.group_id = g.group_id
-                AND u.user_id = :userID";
+        $sql = "CALL getGroupsForUser(:userID)";
 
         $query = $database->prepare($sql);
         $query->execute(array(':userID' => $userID));

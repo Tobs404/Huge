@@ -26,6 +26,7 @@
                     <td>Avatar</td>
                     <td>Username</td>
                     <td>Chat With User</td>
+                    <td>new Messages</td>
                 </tr>
                 </thead>
                 <?php foreach ($this->users as $user) { ?>
@@ -45,24 +46,31 @@
                     </tr>
                 <?php } ?>
                 <?php foreach ($this->groups ?? [] as $group) { ?>
-                    <tr class="active">
-                        <td><?= $group->group_id; ?></td>
-                        <td><?= $group->name; ?></td>
-                        <?php if ($group->is_group) { ?>
-                            <td>
-                                <a href="<?= Config::get('URL') . 'Messenger/showGroupMessages/' . $group->group_id ?>">
-                                    Messages
-                                </a>
-                            </td>
-                        <?php } else { ?>
-                            <td>
-                                <a href="<?= Config::get('URL') . 'Messenger/showMessages/' . $user->user_id ?>">
-                                    Messages
-                                </a>
-                            </td>
-                        <?php } ?>
+    <tr class="active">
+        <td><?= $group->group_id; ?></td>
+        <td><?= $group->name; ?></td>
+        <?php if ($group->is_group) { ?>
+            <td>
+                <a href="<?= Config::get('URL') . 'Messenger/showGroupMessages/' . $group->group_id ?>">
+                    Messages
+                </a>
+                </td>
+                    <?php } else { ?>
+                        <td>
+                            <a href="<?= Config::get('URL') . 'Messenger/showMessages/' . $group->user_id ?>">
+                                Messages
+                            </a>
+                        </td>
+                    <?php } ?>
+                    <?php $newMessages = MessageModel::getNewMessages($group->group_id); ?>
+                    <?php if (!empty($newMessages)) { ?>
+                        <td style="background-color: red; color: white; font-weight: bold;">
+                            <?= count($newMessages) ?> new
+                        </td>
+                    <?php } else { ?>
                         <td></td>
-                    </tr>
+                    <?php } ?>
+                </tr>
                 <?php } ?>
             </table>
         </div>

@@ -36,8 +36,11 @@ class MessengerController extends Controller
 
     public function showGroupMessages($groupID)
     {
+        MessageModel::markAsRead($groupID);
+        
         $this->View->render('messenger/showGroupMessages', array(
             'messages' => MessageModel::getMessages($groupID),
+            'newMessages' => MessageModel::getNewMessages($groupID),
             'groupID'  => $groupID,
             'users'    => UserModel::getPublicProfilesOfAllUsers()
         ));
@@ -53,10 +56,13 @@ class MessengerController extends Controller
             die("Group could not be created");
         }
 
+        MessageModel::markAsRead($groupID);
+
         $messages = MessageModel::getMessages($groupID);
 
         $this->View->render('messenger/showMessages', [
             'messages' => $messages,
+            'newMessages' => MessageModel::getNewMessages($groupID),
             'groupID' => $groupID,
             'targetUserID' => $targetUserID
         ]);
