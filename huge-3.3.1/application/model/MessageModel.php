@@ -16,7 +16,7 @@ class MessageModel
         $date = date('Y-m-d H:i:s');
         $ownerID = Session::get('user_id');
 
-        $sql = "INSERT INTO messages (owner_id, message_content, date, is_read, group_id) VALUES (:owner, :message, :date, :is_read , :group_id)";
+        $sql = "CALL insertMessage(:owner, :message, :date, :is_read, :group_id)";
         $query = $database->prepare($sql);
         $query->execute(array(':owner' => $ownerID, ':message' => $message, ':date' => $date, ':is_read' => 0, ':group_id' => $group_id));
     }
