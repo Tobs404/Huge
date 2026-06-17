@@ -74,18 +74,7 @@ class ImageModel
 
         $ownerID = Session::get('user_id');
 
-        $sql="
-        INSERT INTO images_owner
-        (
-            ownerID,
-            imageHash
-        )
-        VALUES
-        (
-            :ownerID,
-            :imageHash
-        )
-        ";
+        $sql="CALL saveImage(:ownerID, :imageHash)";
 
         $query=$database->prepare($sql);
 
@@ -104,11 +93,7 @@ class ImageModel
 
         $ownerID = Session::get('user_id');
 
-        $sql="
-        SELECT imageHash
-        FROM images_owner
-        WHERE ownerID=:ownerID
-        ";
+        $sql="CALL getUserimages(:ownerID)";
 
         $query=$database->prepare($sql);
         $query->execute([
