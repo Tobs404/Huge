@@ -30,7 +30,8 @@ class MessageModel
         $query = $database->prepare($sql);
         $query->execute([
             ':user1' => $user1,
-            ':user2' => $user2
+            ':user2' => $user2,
+            ':is_group' =>$is_group
         ]);
 
         $existing = $query->fetch();

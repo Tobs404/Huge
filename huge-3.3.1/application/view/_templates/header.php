@@ -34,6 +34,9 @@
                  <li <?php if (View::checkForActiveControllerAndAction($filename, "login/index")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo Config::get('URL'); ?>UserOverview/index">Users</a>
                 </li>
+                <li <?php if (View::checkForActiveControllerAndAction($filename, "Image/index")) { echo ' class="active" '; } ?> >
+                    <a href="<?php echo Config::get('URL'); ?>Image/index">Images</a>
+                </li>
 
             <?php } else { ?>
                 <!-- for not logged in users -->

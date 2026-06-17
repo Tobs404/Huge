@@ -261,7 +261,6 @@ class LoginModel
         // @see https://www.owasp.org/index.php/PHP_Security_Cheat_Sheet#Cookies
         setcookie(session_name(), session_id(), time() + Config::get('SESSION_RUNTIME'), Config::get('COOKIE_PATH'),
             Config::get('COOKIE_DOMAIN'), Config::get('COOKIE_SECURE'), Config::get('COOKIE_HTTP'));
-
     }
 
     /**
