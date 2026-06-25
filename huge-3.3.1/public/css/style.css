@@ -305,3 +305,12 @@ body {
 	border-bottom-right-radius: 0.1em;
 	border-top-right-radius: 0.1em;
 }
+
+.btn-buy {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #3498db;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}

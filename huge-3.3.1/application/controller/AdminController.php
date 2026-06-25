@@ -24,6 +24,12 @@ class AdminController extends Controller
         );
     }
 
+    public function loadShop(){
+        $this->View->render('admin/adminshop', array(
+            'items' => ShopModel::getItems())
+        );
+    }
+
     public function actionAccountSettings()
     {
         AdminModel::setAccountSuspensionAndDeletionStatus(

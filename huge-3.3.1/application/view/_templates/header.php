@@ -8,6 +8,7 @@
     <link rel="icon" href="data:;base64,=">
     <!-- CSS -->
     <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/style.css" />
+    <link rel="stylesheet" href="<?php echo Config::get('URL'); ?>css/shop.css">
 </head>
 <body>
     <!-- wrapper, to center website -->
@@ -18,15 +19,9 @@
 
         <!-- navigation -->
         <ul class="navigation">
-            <li <?php if (View::checkForActiveController($filename, "index")) { echo ' class="active" '; } ?> >
-                <a href="<?php echo Config::get('URL'); ?>index/index">Index</a>
-            </li>
             <?php if (Session::userIsLoggedIn()) { ?>
                 <li <?php if (View::checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo Config::get('URL'); ?>dashboard/index">Dashboard</a>
-                </li>
-                <li <?php if (View::checkForActiveController($filename, "note")) { echo ' class="active" '; } ?> >
-                    <a href="<?php echo Config::get('URL'); ?>note/index">My Notes</a>
                 </li>
                 <li <?php if (View::checkForActiveController($filename, "dashboard")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo Config::get('URL'); ?>Messenger/index">Messenger</a>
@@ -37,7 +32,12 @@
                 <li <?php if (View::checkForActiveControllerAndAction($filename, "Image/index")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo Config::get('URL'); ?>Image/index">Images</a>
                 </li>
-
+                <li <?php if (View::checkForActiveControllerAndAction($filename, "Shop/index")) { echo ' class="active" '; } ?> >
+                    <a href="<?php echo Config::get('URL'); ?>Shop/index">Shop</a>
+                </li>
+                <li <?php if (View::checkForActiveControllerAndAction($filename, "Shop/basket")) { echo ' class="active" '; } ?> >
+                    <a href="<?php echo Config::get('URL'); ?>Basket/index">Basket</a>
+                </li>
             <?php } else { ?>
                 <!-- for not logged in users -->
                 <li <?php if (View::checkForActiveControllerAndAction($filename, "login/index")) { echo ' class="active" '; } ?> >
@@ -81,9 +81,13 @@
                 } ?> >
                     <a href="<?php echo Config::get('URL'); ?>admin/">Admin</a>
                 </li>
-                 <li <?php if (View::checkForActiveControllerAndAction($filename, "register/index")) { echo ' class="active" '; } ?> >
+                <li <?php if (View::checkForActiveControllerAndAction($filename, "register/index")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo Config::get('URL'); ?>register/index">Register</a>
                 </li>
+                <li <?php if (View::checkForActiveControllerAndAction($filename, "adminshop/index")) { echo ' class="active" '; } ?> >
+                    <a href="<?php echo Config::get('URL'); ?>adminshop/index">Manage Shop</a>
+                </li>
+                
             <?php endif; ?>
         <?php endif; ?>
         </ul>
