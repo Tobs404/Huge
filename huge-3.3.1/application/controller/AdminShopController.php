@@ -15,7 +15,8 @@ class AdminShopController extends Controller
         );
     }
 
-    public function removeItem($id){
+    public function removeItem($id)
+    {
         AdminShopModel::deleteItemFromDatabase($id);
         Session::add('feedback_positive', 'Item removed from shop.');
         header("Location: " . Config::get('URL') . "adminshop");
@@ -29,5 +30,11 @@ class AdminShopController extends Controller
         }
 
         $this->View->render('adminshop/addItem');
+    }
+
+    public function viewOpenOrder(){
+        $this->View->render('adminshop/openOrders', array(
+                'orders' => AdminShopModel::getOrders())
+        );
     }
 }

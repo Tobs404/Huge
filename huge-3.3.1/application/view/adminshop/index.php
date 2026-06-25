@@ -9,6 +9,7 @@
             Huge Admin Site Add or Remove current items!
         </p>
         <a href="<?= Config::get('URL') . 'adminshop/addItem/' ?>">Add an Item</a>
+         <a href="<?= Config::get('URL') . 'adminshop/viewOpenOrder/' ?>">Show all currently open Orders</a>
 
         <?php if (!empty($this->items)) : ?>
             <div class="shop-grid">

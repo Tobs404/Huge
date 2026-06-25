@@ -50,12 +50,7 @@ class AdminShopModel
             $description = $_POST["description"];
             $price = $_POST["price"];
 
-            self::SaveToDatabase(
-                $filename,     // e.g. "shirt.png"
-                $name,
-                $description,
-                $price
-            );
+            self::SaveToDatabase($filename,$name,$description,$price);
 
             Session::add(
                 'feedback_positive',
@@ -92,6 +87,21 @@ class AdminShopModel
     public static function deleteItemFromDatabase($id)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
+        
+        $sql = "CALL getImageName(:i_id)";
+        $query = $database->prepare($sql);
+        
+        $query->execute(array(
+            ':i_id' => $id
+        ));
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        $filename = $result['imageName'] ?? null;
+
+        $path = dirname(__DIR__, 2) . "/public/shopImages/";
+        $filename = $path . $filename;
+
+        unlink($filename);
 
         $sql = "CALL deleteItem(:i_id)";
         $query = $database->prepare($sql);
@@ -99,5 +109,17 @@ class AdminShopModel
         $query->execute(array(
             ':i_id' => $id
         ));
+    }
+
+    public static function getOrders(){
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "CALL getOrders()";
+        $query = $database->prepare($sql);
+
+        $query->execute();
+
+        $orders = $query->fetchAll();
+        return $orders;
     }
 }
