@@ -32,7 +32,7 @@
                             €<?php echo number_format($item->price, 2); ?>
                         </p>
 
-                         <form action="<?= Config::get('URL'); ?>basket/removeFromBasket/<?= $item->id ?>" method="post">
+                        <form action="<?= Config::get('URL'); ?>basket/removeFromBasket/<?= $item->id ?>" method="post">
                             <div>
                                 <input type="hidden" name="groupID" value="<?= $item->id ?>">
                                 <button type="submit">Remove from Cart</button>

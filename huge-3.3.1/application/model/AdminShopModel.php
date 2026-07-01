@@ -122,4 +122,18 @@ class AdminShopModel
         $orders = $query->fetchAll();
         return $orders;
     }
+
+    public static function UpdateOrderStatus($id, $status){
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+
+        $sql = "CALL updateOrderStatus(:i_id, :i_status)";
+        $query = $database->prepare($sql);
+
+        $query->execute(array(
+            ':i_id' => $id,
+            ':i_status' => $status
+        ));
+    }
 }

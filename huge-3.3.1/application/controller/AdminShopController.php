@@ -37,4 +37,13 @@ class AdminShopController extends Controller
                 'orders' => AdminShopModel::getOrders())
         );
     }
+
+    public function UpdateOrderStatus(){
+        $id = $_POST['orderId'];
+        $status = $_POST['status'];
+        AdminShopModel::UpdateOrderStatus($id, $status);
+        Session::add('feedback_positive', 'Order status updated.');
+        header("Location: " . Config::get('URL') . "adminshop/viewOpenOrder");
+        exit();
+    }
 }

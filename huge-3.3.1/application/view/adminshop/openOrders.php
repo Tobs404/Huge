@@ -17,6 +17,7 @@
                     <td>Amount</td>
                     <td>Artikel Nummern</td>
                     <td>Actions</td>
+                    <td></td>
                 </tr>
                 </thead>
                 <?php foreach ($this->orders as $order) { ?>
@@ -26,7 +27,20 @@
                         <td>
                             <?= htmlspecialchars($order->items ?? ''); ?>
                         </td>
-                        <td><?= htmlspecialchars($order->orderStatus); ?></td>
+                        <td>
+                            <form action="<?= Config::get('URL'); ?>adminshop/UpdateOrderStatus" method="post">
+                                <input type="hidden" name="orderId" value="<?= $order->orderID ?>">
+
+                                <select name="status">
+                                    <option value="Open" <?= $order->orderStatus == 'Open' ? 'selected' : '' ?>>Open</option>
+                                    <option value="Processing" <?= $order->orderStatus == 'Processing' ? 'selected' : '' ?>>Processing</option>
+                                    <option value="Shipped" <?= $order->orderStatus == 'Shipped' ? 'selected' : '' ?>>Shipped</option>
+                                    <option value="Completed" <?= $order->orderStatus == 'Completed' ? 'selected' : '' ?>>Completed</option>
+                                </select>
+
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
                     </tr>
                 <?php } ?>
             </table>
