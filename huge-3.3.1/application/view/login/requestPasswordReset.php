@@ -12,24 +12,16 @@
                 <input type="text" name="user_name_or_email" required />
             </label>
 
-            <!-- show the captcha by calling the login/showCaptcha-method in the src attribute of the img tag -->
-            <img id="captcha" src="<?php echo Config::get('URL'); ?>register/showCaptcha" /><br/>
-            <input type="text" name="captcha" placeholder="Enter captcha above" required />
-
-            <!-- quick & dirty captcha reloader -->
-            <a href="#" style="display: block; font-size: 11px; margin: 5px 0 15px 0;"
-               onclick="document.getElementById('captcha').src = '<?php echo Config::get('URL'); ?>register/showCaptcha?' + Math.random(); return false">Reload Captcha</a>
-
+            <div class="g-recaptcha" data-sitekey="<?php echo Config::get('GOOGLE_RECAPTCHA_SITE_KEY'); ?>"></div>
             <input type="submit" value="Send me a password-reset mail" />
         </form>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     </div>
 </div>
 <div class="container">
     <p style="display: block; font-size: 11px; color: #999;">
-        Please note: This captcha will be generated when the img tag requests the captcha-generation
-        (= a real image) from YOURURL/register/showcaptcha. As this is a client-side triggered request, a
-        $_SESSION["captcha"] dump will not show the captcha characters. The captcha generation
-        happens AFTER the request that generates THIS page has been finished.
+        This page now uses Google reCAPTCHA for bot protection. Make sure your
+        <code>GOOGLE_RECAPTCHA_SITE_KEY</code> and <code>GOOGLE_RECAPTCHA_SECRET_KEY</code> are configured in <code>application/config/config.development.php</code>.
     </p>
 </div>

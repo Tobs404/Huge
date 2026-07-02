@@ -17,7 +17,7 @@ class PasswordResetModel
      */
     public static function requestPasswordReset($user_name_or_email, $captcha)
     {
-        if (!CaptchaModel::checkCaptcha($captcha)) {
+        if (!CaptchaModel::verifyReCaptcha($captcha)) {
             Session::add('feedback_negative', Text::get('FEEDBACK_CAPTCHA_WRONG'));
             return false;
         }

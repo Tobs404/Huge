@@ -46,6 +46,9 @@
                 <li <?php if (View::checkForActiveControllerAndAction($filename, "login/index")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo Config::get('URL'); ?>UserOverview/index">Users</a>
                 </li>
+                                <li <?php if (View::checkForActiveControllerAndAction($filename, "register/index")) { echo ' class="active" '; } ?> >
+                    <a href="<?php echo Config::get('URL'); ?>register/index">Register</a>
+                </li>
             <?php } ?>
         </ul>
 
@@ -80,9 +83,6 @@
                     echo ' class="active" ';
                 } ?> >
                     <a href="<?php echo Config::get('URL'); ?>admin/">Admin</a>
-                </li>
-                <li <?php if (View::checkForActiveControllerAndAction($filename, "register/index")) { echo ' class="active" '; } ?> >
-                    <a href="<?php echo Config::get('URL'); ?>register/index">Register</a>
                 </li>
                 <li <?php if (View::checkForActiveControllerAndAction($filename, "adminshop/index")) { echo ' class="active" '; } ?> >
                     <a href="<?php echo Config::get('URL'); ?>adminshop/index">Manage Shop</a>

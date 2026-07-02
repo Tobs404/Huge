@@ -75,6 +75,8 @@ return array(
      */
     'CAPTCHA_WIDTH' => 359,
     'CAPTCHA_HEIGHT' => 100,
+    'GOOGLE_RECAPTCHA_SITE_KEY' => '6LdTqkAtAAAAAI1YvhAckG1nJ-bobKxyi31JTqAk', // reCAPTCHA v3 site key
+    'GOOGLE_RECAPTCHA_SECRET_KEY' => '6LdTqkAtAAAAAGHRzhdb7hIb7bDofhEIxYMPzlfN', // reCAPTCHA v3 secret key
     /**
      * Configuration for: Cookies
      * 1209600 seconds = 2 weeks
